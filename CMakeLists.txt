@@ -36,16 +36,16 @@ set(SOURCES
     src/main.cpp
 )
 
-add_executable(myfirstvsgapplication ${SOURCES})
+add_executable(testviewer ${SOURCES})
 
-target_link_libraries(myfirstvsgapplication vsg::vsg)
+target_link_libraries(testviewer vsg::vsg)
 
 if (vsgXchange_FOUND)
-    target_compile_definitions(myfirstvsgapplication PRIVATE vsgXchange_FOUND)
-    target_link_libraries(myfirstvsgapplication vsgXchange::vsgXchange)
+    target_compile_definitions(testviewer PRIVATE vsgXchange_FOUND)
+    target_link_libraries(testviewer vsgXchange::vsgXchange)
 endif()
 
-install(TARGETS myfirstvsgapplication
+install(TARGETS testviewer
         RUNTIME DESTINATION bin
 )
 

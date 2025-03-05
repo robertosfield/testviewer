@@ -285,6 +285,7 @@ int main(int argc, char** argv)
                 std::cout<<"Warning: unable to read animation path : "<<pathFilename<<std::endl;
                 return 1;
             }
+            animationPath->mode = vsg::AnimationPath::REPEAT;
 
             auto animationPathHandler = vsg::AnimationPathHandler::create(camera, animationPath, viewer->start_point());
             viewer->addEventHandler(animationPathHandler);
@@ -300,9 +301,14 @@ int main(int argc, char** argv)
         viewer->addEventHandler(animationPathHandler);
         viewer->addEventHandler(vsg::Trackball::create(camera, ellipsoidModel));
 
-        if (animationPathHandler->path && reportAverageFrameRate && maxTime == std::numeric_limits<double>::max())
+        if (animationPathHandler->path)
         {
-            maxTime = animationPathHandler->path->period();
+            animationPathHandler->path->mode = vsg::AnimationPath::REPEAT;
+
+            if (reportAverageFrameRate && maxTime == std::numeric_limits<double>::max())
+            {
+                maxTime = animationPathHandler->path->period();
+            }
         }
 #else
         auto cameraAnimation = vsg::CameraAnimationHandler::create(camera, pathFilename, options);

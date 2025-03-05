@@ -205,11 +205,31 @@ int main(int argc, char** argv)
         // add close handler to respond to the close window button and pressing escape
         viewer->addEventHandler(vsg::CloseHandler::create(viewer));
 
+#if VSG_VERSION_MAJOR==1 && VSG_VERSION_MINOR<1
+       if (pathFilename.empty())
+        {
+            viewer->addEventHandler(vsg::Trackball::create(camera, ellipsoidModel));
+        }
+        else
+        {
+            auto animationPath = vsg::read_cast<vsg::AnimationPath>(pathFilename, options);
+            if (!animationPath)
+            {
+                std::cout<<"Warning: unable to read animation path : "<<pathFilename<<std::endl;
+                return 1;
+            }
+
+            auto animationPathHandler = vsg::AnimationPathHandler::create(camera, animationPath, viewer->start_point());
+            animationPathHandler->printFrameStatsToConsole = true;
+            viewer->addEventHandler(animationPathHandler);
+        }
+#else
         auto animationPathHandler = vsg::RecordAnimationPathHandler::create(camera, pathFilename, options);
         animationPathHandler->printFrameStatsToConsole = true;
         viewer->addEventHandler(animationPathHandler);
-
         viewer->addEventHandler(vsg::Trackball::create(camera, ellipsoidModel));
+#endif
+
 
         // if required preload specific number of PagedLOD levels.
         if (loadLevels > 0)

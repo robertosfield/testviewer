@@ -9,8 +9,8 @@
 #include <iostream>
 #include <thread>
 
-#define HAS_INSTRUMENTATION VSG_VERSION_MAJOR>1 || (VSG_VERSION_MAJOR==1 && VSG_VERSION_MINOR>=1)
-#define HAS_ANIMATION VSG_VERSION_MAJOR>1 || (VSG_VERSION_MAJOR==1 && VSG_VERSION_MINOR>=1)
+#define HAS_INSTRUMENTATION (VSG_VERSION_MAJOR>1) || (VSG_VERSION_MAJOR==1 && VSG_VERSION_MINOR>=2) || (VSG_VERSION_MAJOR==1 && VSG_VERSION_MINOR==1 && VSG_VERSION_PATCH>=1)
+#define HAS_ANIMATION (VSG_VERSION_MAJOR>1) || (VSG_VERSION_MAJOR==1 && VSG_VERSION_MINOR>=2) || (VSG_VERSION_MAJOR==1 && VSG_VERSION_MINOR==1 && VSG_VERSION_PATCH>=2)
 
 vsg::ref_ptr<vsg::Node> createTextureQuad(vsg::ref_ptr<vsg::Data> sourceData, vsg::ref_ptr<vsg::Options> options)
 {
@@ -52,6 +52,10 @@ int main(int argc, char** argv)
     {
         // set up defaults and read command line arguments to override them
         vsg::CommandLine arguments(&argc, argv);
+
+        std::cout<<"VSG version="<<VSG_VERSION_MAJOR<<"."<<VSG_VERSION_MINOR<<"."<<VSG_VERSION_PATCH<<std::endl;
+        for(int i=0; i<argc; ++i) std::cout<<argv[i]<<" ";
+        std::cout<<std::endl;
 
         // set up vsg::Options to pass in filepaths, ReaderWriters and other IO related options to use when reading and writing files.
         auto options = vsg::Options::create();

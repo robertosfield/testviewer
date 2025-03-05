@@ -317,6 +317,7 @@ int main(int argc, char** argv)
 #else
         auto cameraAnimation = vsg::CameraAnimationHandler::create(camera, pathFilename, options);
         viewer->addEventHandler(cameraAnimation);
+        viewer->addEventHandler(vsg::Trackball::create(camera, ellipsoidModel));
         if (autoPlay && cameraAnimation->animation)
         {
             cameraAnimation->play();

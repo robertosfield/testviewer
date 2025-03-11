@@ -141,6 +141,11 @@ int main(int argc, char** argv)
             return 0;
         }
 
+        if (arguments.read("--gfx"))
+        {
+            windowTraits->requestedLayers.push_back("VK_LAYER_LUNARG_gfxreconstruct");
+        }
+
         if (arguments.read({"--shader-debug-info", "--sdi"}))
         {
             enableGenerateDebugInfo(options);

@@ -11,6 +11,7 @@
 
 #define HAS_INSTRUMENTATION (VSG_VERSION_MAJOR>1) || (VSG_VERSION_MAJOR==1 && VSG_VERSION_MINOR>=2) || (VSG_VERSION_MAJOR==1 && VSG_VERSION_MINOR==1 && VSG_VERSION_PATCH>=1)
 #define HAS_ANIMATION (VSG_VERSION_MAJOR>1) || (VSG_VERSION_MAJOR==1 && VSG_VERSION_MINOR>=2) || (VSG_VERSION_MAJOR==1 && VSG_VERSION_MINOR==1 && VSG_VERSION_PATCH>=2)
+#define HAS_DYNAMIC_VIEWPORTSTATE (VSG_VERSION_MAJOR>1) || (VSG_VERSION_MAJOR==1 && VSG_VERSION_MINOR>=2) || (VSG_VERSION_MAJOR==1 && VSG_VERSION_MINOR==1 && VSG_VERSION_PATCH>=11)
 
 vsg::ref_ptr<vsg::Node> createTextureQuad(vsg::ref_ptr<vsg::Data> sourceData, vsg::ref_ptr<vsg::Options> options)
 {
@@ -133,6 +134,21 @@ int main(int argc, char** argv)
         {
             resourceHints = vsg::read_cast<vsg::ResourceHints>(resourceHintsFilename, options);
         }
+
+#if HAS_DYNAMIC_VIEWPORTSTATE
+
+        if (arguments.read({"--dynamic-viewport", "--dv"}))
+        {
+            if (!resourceHints) resourceHints = vsg::ResourceHints::create();
+            resourceHints->viewportStateHint = vsg::DYNAMIC_VIEWPORTSTATE;
+        }
+
+        if (arguments.read({"--static-viewport", "--sv"}))
+        {
+            if (!resourceHints) resourceHints = vsg::ResourceHints::create();
+            resourceHints->viewportStateHint = vsg::STATIC_VIEWPORTSTATE;
+        }
+#endif
 
         if (auto outputResourceHintsFilename = arguments.value<vsg::Path>("", "--orh"))
         {
